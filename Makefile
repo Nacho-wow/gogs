@@ -38,7 +38,7 @@ generate-app-config:
 	@echo '[database]' >> app.ini
 	@echo "HOST = \"${RDS_HOST}\"" >> app.ini
 	@echo "USER = \"${DB_USER}\"" >> app.ini
-	@echo "PASSWORD = `\"${DB_PASSWORD}\"`" >> app.ini
+	@echo "PASSWORD = \"`${DB_PASSWORD}`\"" >> app.ini
 	@echo 'SSL_MODE = require' >> app.ini
 	@echo '' >> app.ini
 	@echo '[security]' >> app.ini
@@ -55,7 +55,7 @@ configure:
 	
 	cd ansible && ANSIBLE_HOST_KEY_CHECKING=False \
 	ansible-playbook -i "$(EC2_IP)," playbook.yml -u ubuntu \
-	--extra-vars ec2_ip=$(EC2_IP)" \
+	--extra-vars "ec2_ip=$(EC2_IP)" \
 	--private-key $(KEY)
 
 clean:
