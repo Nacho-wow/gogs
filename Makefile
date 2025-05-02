@@ -32,13 +32,13 @@ generate-app-config:
 	@echo 'RUN_MODE = prod' > app.ini
 	@echo '' >> app.ini
 	@echo '[server]' >> app.ini
-	@echo "EXTERNAL_URL = \"http://${EC2_IP}:3000\"" >> app.ini
-	@echo "DOMAIN = \"${EC2_IP}\"" >> app.ini
+	@echo "EXTERNAL_URL = http://${EC2_IP}:3000" >> app.ini
+	@echo "DOMAIN = ${EC2_IP}" >> app.ini
 	@echo '' >> app.ini
 	@echo '[database]' >> app.ini
-	@echo "HOST = \"${RDS_HOST}\"" >> app.ini
-	@echo "USER = \"${DB_USER}\"" >> app.ini
-	@echo "PASSWORD = \"`${DB_PASSWORD}`\"" >> app.ini
+	@echo "HOST = ${RDS_HOST}" >> app.ini
+	@echo "USER = ${DB_USER}" >> app.ini
+	@echo "PASSWORD = \\\`${DB_PASSWORD}\\\`" >> app.ini
 	@echo 'SSL_MODE = require' >> app.ini
 	@echo '' >> app.ini
 	@echo '[security]' >> app.ini
