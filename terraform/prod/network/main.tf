@@ -4,9 +4,9 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "terraform-backend-wow"   
-    key    = "infra/network/terraform.tfstate"  
-    region = "us-east-2"               
+    bucket = "terraform-backend-wow"
+    key    = "infra/network/terraform.tfstate"
+    region = "us-east-2"
   }
 }
 

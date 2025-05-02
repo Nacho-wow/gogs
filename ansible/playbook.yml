@@ -32,7 +32,7 @@
         state: directory
         mode: "0755"
       loop:
-        - /var/lib/gogs/data
+        - /var/lib/gogs/data/gogs/conf
         - /var/lib/gogs/backup
 
     - name: Copiar el archivo app.ini
