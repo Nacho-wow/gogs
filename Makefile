@@ -63,4 +63,4 @@ clean:
 
 	rm -rf $(WORKSPACE)/*
 
-	sudo rm -rf /tmp/*
+	rm -rf /tmp/*
