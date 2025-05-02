@@ -1,5 +1,5 @@
 output "rds_endpoint" {
-  value = split(":", aws_db_instance.postgres.endpoint)[0]
+  value = split(":", aws_db_instance.gogs_db.endpoint)[0]
 }
 
 output "rds_sg_id" {

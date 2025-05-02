@@ -2,7 +2,7 @@
 
 resource "aws_security_group" "ec2_sg" {
   name        = "ec2_sg"
-  description = "Security group for Flask EC2"
+  description = "Security group for Gogs EC2"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -36,7 +36,7 @@ resource "aws_security_group" "ec2_sg" {
 
 # EC2
 
-resource "aws_instance" "flask_instance" {
+resource "aws_instance" "gogs_instance" {
   ami                    = var.ec2_ami
   instance_type          = "t2.micro"
   subnet_id              = var.public_subnet_id
@@ -49,6 +49,6 @@ resource "aws_instance" "flask_instance" {
   }
 
   tags = {
-    Name = "flask-app-EC2"
+    Name = "gogs-EC2"
   }
 }

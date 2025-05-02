@@ -29,8 +29,8 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
 
 # RDS
 
-resource "aws_db_instance" "postgres" {
-  identifier             = "flask-db"
+resource "aws_db_instance" "gogs_db" {
+  identifier             = "gogs-db"
   engine                 = "postgres"
   instance_class         = "db.t3.micro"
   allocated_storage      = 20

@@ -5,7 +5,7 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = "flask-project-vpc"
+    Name = "gogs-project-vpc"
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "flask-project-igw"
+    Name = "gogs-project-igw"
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "flask-public-subnet"
+    Name = "gogs-public-subnet"
   }
 }
 
@@ -39,7 +39,7 @@ resource "aws_subnet" "private_subnet_a" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "flask-private-subnet-a"
+    Name = "gogs-private-subnet-a"
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_subnet" "private_subnet_b" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "flask-private-subnet-b"
+    Name = "gogs-private-subnet-b"
   }
 }
 
@@ -65,7 +65,7 @@ resource "aws_route_table" "public_route_table" {
   }
 
   tags = {
-    Name = "flask-route-table"
+    Name = "gogs-route-table"
   }
 }
 
