@@ -62,5 +62,3 @@ clean:
 	docker system prune -af --volumes
 
 	rm -rf $(WORKSPACE)/*
-
-	rm -rf /tmp/*
