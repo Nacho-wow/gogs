@@ -38,7 +38,7 @@ generate-app-config:
 	@echo '[database]' >> app.ini
 	@echo "HOST = \"${RDS_HOST}\"" >> app.ini
 	@echo "USER = \"${DB_USER}\"" >> app.ini
-	@echo "PASSWORD = \"${DB_PASSWORD}\"" >> app.ini
+	@echo "PASSWORD = `\"${DB_PASSWORD}\"`" >> app.ini
 	@echo 'SSL_MODE = require' >> app.ini
 	@echo '' >> app.ini
 	@echo '[security]' >> app.ini
