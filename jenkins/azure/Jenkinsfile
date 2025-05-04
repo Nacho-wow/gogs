@@ -1,0 +1,28 @@
+pipeline {
+    agent {
+        label 'agent1'
+    }
+
+    environment {
+        DB_NAME                 = 'gogs'
+        DB_USER                 = credentials('DB_USER')
+        DB_PASSWORD             = credentials('DB_PASSWORD')
+
+        EC2_AMI                 = 'ami-04f167a56786e4b09'
+        EC2_KEY_NAME            = credentials('EC2_KEY_NAME')
+        CONTROL_IP              = credentials('CONTROL_IP')
+
+        AWS_ACCESS_KEY_ID       = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY   = credentials('AWS_SECRET_ACCESS_KEY')
+
+        // EMAIL_RECIPIENTS = credentials('EMAIL_RECIPIENTS')
+    }
+
+    stages {
+        stage('Pipipi') {
+            steps {
+                echo 'aun no se hacer las cosas en azure :c'
+            }
+        }
+    }
+}

@@ -8,31 +8,10 @@ pipeline {
     }
 
     environment {
-        DB_NAME                 = 'gogs'
-        DB_USER                 = credentials('DB_USER')
-        DB_PASSWORD             = credentials('DB_PASSWORD')
-
-        EC2_AMI                 = 'ami-04f167a56786e4b09'
-        EC2_KEY_NAME            = 'flask_key'
-        CONTROL_IP              = credentials('CONTROL_IP')
-
-        AWS_ACCESS_KEY_ID       = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY   = credentials('AWS_SECRET_ACCESS_KEY')
-
         // EMAIL_RECIPIENTS = credentials('EMAIL_RECIPIENTS')
     }
 
     stages {
-        stage('Get Agent IP Address') {
-            steps {
-                script {
-                    def agent_ip = sh(script: "curl -s https://checkip.amazonaws.com", returnStdout: true).trim()
-                    env.AGENT_IP = agent_ip
-                    echo "IP publica del agente: ${env.AGENT_IP}"
-                }
-            }
-        }
-
         stage('Clone Repo') {
             steps {
                 checkout scm
@@ -41,10 +20,19 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                sh 'make docker-build'
+            }
+        }
+
+        stage("Deploy Gogs in both providers") {
+            when {
+                branch 'main'
+            }
+            steps {
                 script {
                     parallel(
                         job1: {
-                            sh 'make docker-build'
+                            build job: 'deploy-azure'
                         },
                         job2: {
                             build job: 'deploy-aws'
@@ -53,66 +41,6 @@ pipeline {
                 }
             }
         }
-
-        // stage('Generate Terraform Variables') {
-        //     when {
-        //         branch 'main'
-        //     }
-        //     steps {
-        //         sh '''
-        //             make generate-tfvars \
-        //                 EC2_AMI=$EC2_AMI \
-        //                 EC2_KEY_NAME=$EC2_KEY_NAME \
-        //                 DB_USER=$DB_USER \
-        //                 DB_PASSWORD=$DB_PASSWORD \
-        //                 DB_NAME=$DB_NAME \
-        //                 CONTROL_IP=$CONTROL_IP \
-        //                 AGENT_IP=$AGENT_IP
-        //         '''
-        //     }
-        // }
-
-        // stage('Create Infrastructure') {
-        //     when {
-        //         branch 'main'
-        //     }
-        //     steps {
-        //         sh 'make infra-aws'
-        //     }
-        // }
-
-        // stage("Generate App Config File") {
-        //     when {
-        //         branch 'main'
-        //     }
-        //     steps {
-        //         sh '''
-        //             make generate-app-config \
-        //                 DB_USER=$DB_USER \
-        //                 DB_PASSWORD=$DB_PASSWORD
-        //         '''
-        //     }
-        // }
-
-        // stage("Save Docker Image") {
-        //     when {
-        //         branch 'main'
-        //     }
-        //     steps {
-        //         sh 'make save-docker-image'
-        //     }
-        // }
-
-        // stage('Configure EC2 with Ansible') {
-        //     when {
-        //         branch 'main'
-        //     }
-        //     steps {
-        //         withCredentials([sshUserPrivateKey(credentialsId: 'ec2_ssh_key', keyFileVariable: 'KEY')]) {
-        //             sh 'make configure KEY=$KEY'
-        //         }
-        //     }
-        // }
     }
 
     post {
