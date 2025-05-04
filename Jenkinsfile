@@ -47,7 +47,7 @@ pipeline {
                             sh 'make docker-build'
                         },
                         job2: {
-                            build job: 'gogs/aws'
+                            build job: 'deploy-aws'
                         }
                     )
                 }
