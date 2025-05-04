@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'agent1'
+    }
 
     triggers {
         githubPush()
@@ -39,69 +41,78 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'make docker-build'
-            }
-        }
-
-        stage('Generate Terraform Variables') {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh '''
-                    make generate-tfvars \
-                        EC2_AMI=$EC2_AMI \
-                        EC2_KEY_NAME=$EC2_KEY_NAME \
-                        DB_USER=$DB_USER \
-                        DB_PASSWORD=$DB_PASSWORD \
-                        DB_NAME=$DB_NAME \
-                        CONTROL_IP=$CONTROL_IP \
-                        AGENT_IP=$AGENT_IP
-                '''
-            }
-        }
-
-        stage('Create Infrastructure') {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh 'make infra-aws'
-            }
-        }
-
-        stage("Generate App Config File") {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh '''
-                    make generate-app-config \
-                        DB_USER=$DB_USER \
-                        DB_PASSWORD=$DB_PASSWORD
-                '''
-            }
-        }
-
-        stage("Save Docker Image") {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh 'make save-docker-image'
-            }
-        }
-
-        stage('Configure EC2 with Ansible') {
-            when {
-                branch 'main'
-            }
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ec2_ssh_key', keyFileVariable: 'KEY')]) {
-                    sh 'make configure KEY=$KEY'
+                script {
+                    parallel(
+                        job1: {
+                            sh 'make docker-build'
+                        },
+                        job2: {
+                            build job: 'gogs/aws'
+                        }
+                    )
                 }
             }
         }
+
+        // stage('Generate Terraform Variables') {
+        //     when {
+        //         branch 'main'
+        //     }
+        //     steps {
+        //         sh '''
+        //             make generate-tfvars \
+        //                 EC2_AMI=$EC2_AMI \
+        //                 EC2_KEY_NAME=$EC2_KEY_NAME \
+        //                 DB_USER=$DB_USER \
+        //                 DB_PASSWORD=$DB_PASSWORD \
+        //                 DB_NAME=$DB_NAME \
+        //                 CONTROL_IP=$CONTROL_IP \
+        //                 AGENT_IP=$AGENT_IP
+        //         '''
+        //     }
+        // }
+
+        // stage('Create Infrastructure') {
+        //     when {
+        //         branch 'main'
+        //     }
+        //     steps {
+        //         sh 'make infra-aws'
+        //     }
+        // }
+
+        // stage("Generate App Config File") {
+        //     when {
+        //         branch 'main'
+        //     }
+        //     steps {
+        //         sh '''
+        //             make generate-app-config \
+        //                 DB_USER=$DB_USER \
+        //                 DB_PASSWORD=$DB_PASSWORD
+        //         '''
+        //     }
+        // }
+
+        // stage("Save Docker Image") {
+        //     when {
+        //         branch 'main'
+        //     }
+        //     steps {
+        //         sh 'make save-docker-image'
+        //     }
+        // }
+
+        // stage('Configure EC2 with Ansible') {
+        //     when {
+        //         branch 'main'
+        //     }
+        //     steps {
+        //         withCredentials([sshUserPrivateKey(credentialsId: 'ec2_ssh_key', keyFileVariable: 'KEY')]) {
+        //             sh 'make configure KEY=$KEY'
+        //         }
+        //     }
+        // }
     }
 
     post {
