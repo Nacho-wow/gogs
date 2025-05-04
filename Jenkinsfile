@@ -7,9 +7,9 @@ pipeline {
         githubPush()
     }
 
-    environment {
-        // EMAIL_RECIPIENTS = credentials('EMAIL_RECIPIENTS')
-    }
+    // environment {
+    //     EMAIL_RECIPIENTS = credentials('EMAIL_RECIPIENTS')
+    // }
 
     stages {
         stage('Clone Repo') {
