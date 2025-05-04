@@ -13,12 +13,22 @@ pipeline {
 
     stages {
         stage('Clone Repo') {
+            when {
+                not {
+                    branch 'main'
+                }
+            }
             steps {
                 checkout scm
             }
         }
 
         stage('Build Docker Image') {
+            when {
+                not {
+                    branch 'main'
+                }
+            }
             steps {
                 sh 'make docker-build'
             }

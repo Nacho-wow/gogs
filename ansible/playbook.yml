@@ -1,4 +1,4 @@
-- hosts: "{{ ec2_ip }}"
+- hosts: "{{ host_ip }}"
   become: yes
   vars:
     ansible_user: ubuntu
