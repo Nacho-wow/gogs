@@ -15,7 +15,7 @@ locals {
 }
 
 module "rds" {
-  source = "../../../modules/rds"
+  source = "../../../modules/aws/rds"
 
   db_user     = var.db_user
   db_password = var.db_password
