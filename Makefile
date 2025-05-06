@@ -95,5 +95,3 @@ recover-backup:
 
 clean:
 	docker system prune -af --volumes
-
-	rm -rf $(WORKSPACE)/*

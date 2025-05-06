@@ -51,8 +51,8 @@ pipeline {
     post {
         always {
             echo 'Limpiando espacio'
-            cleanWs()
             sh 'make clean'
+            cleanWs()
         }
         failure {
             echo 'Todo mal unu'
