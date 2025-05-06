@@ -87,4 +87,11 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            echo 'Limpiando espacio'
+            cleanWs()
+            sh 'make clean'
+        }
+    }
 }
