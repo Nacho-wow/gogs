@@ -11,5 +11,5 @@ terraform {
 }
 
 module "network" {
-  source = "../../../modules/network"
+  source = "../../../modules/aws/network"
 }
