@@ -11,9 +11,6 @@ pipeline {
         VM_KEY_NAME            = credentials('EC2_KEY_NAME')
         CONTROL_IP              = credentials('CONTROL_IP')
 
-        AWS_ACCESS_KEY_ID       = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY   = credentials('AWS_SECRET_ACCESS_KEY')
-
         AZURE_STORAGE_ACCOUNT   = credentials('AZURE_STORAGE_ACCOUNT')
         AZURE_STORAGE_KEY       = credentials('AZURE_STORAGE_KEY')
 
