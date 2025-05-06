@@ -71,6 +71,28 @@ configure:
 	--extra-vars "host_ip=$(SERVER_IP)" \
 	--private-key $(KEY)
 
+generate-backup-ips:
+	cd terraform/prod/aws/ec2 && terraform output -raw ec2_public_ip > ../../../../EC2_IP.txt
+	cd terraform/prod/azure/network && terraform output -raw vm_ip > ../../../../VM_IP.txt
+
+create-backup:
+	$(eval SERVER_IP=$(shell cat EC2_IP.txt))
+
+	@mkdir -p backup
+
+	cd ansible && ANSIBLE_HOST_KEY_CHECKING=False \
+	ansible-playbook -i "$(SERVER_IP)," backup.yml -u ubuntu \
+	--extra-vars "host_ip=$(SERVER_IP)" \
+	--private-key $(KEY)
+
+recover-backup:
+	$(eval SERVER_IP=$(shell cat VM_IP.txt))
+
+	cd ansible && ANSIBLE_HOST_KEY_CHECKING=False \
+	ansible-playbook -i "$(SERVER_IP)," recover.yml -u ubuntu \
+	--extra-vars "host_ip=$(SERVER_IP)" \
+	--private-key $(KEY)
+
 clean:
 	docker system prune -af --volumes
 

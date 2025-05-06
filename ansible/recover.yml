@@ -1,0 +1,21 @@
+- name: Restaurar backup
+  hosts: "{{ host_ip }}"
+  become: true
+  vars:
+    ansible_user: ubuntu
+
+  tasks:
+    - name: Encontrar backup
+      shell: "ls -t ../backup/*.zip | head -n 1"
+      register: latest_backup
+      changed_when: false
+
+    - name: Copiar archivo de backup
+      copy:
+        src: "{{ latest_backup.stdout }}"
+        dest: "/var/lib/gogs/backup/gogs-backup.zip"
+
+    - name: Restore Gogs inside Docker
+      docker_container_exec:
+        container: "gogs"
+        command: ./gogs restore --from="/backup/gogs-backup.zip" --config=/data/gogs/conf/app.ini
