@@ -16,7 +16,7 @@ locals {
 }
 
 module "security-rules" {
-  source = "../../modules/security-rules"
+  source = "../../../modules/security-rules"
 
   ec2_sg_id = local.ec2_tfstate.outputs.ec2_sg_id.value
   rds_sg_id = local.rds_tfstate.outputs.rds_sg_id.value
