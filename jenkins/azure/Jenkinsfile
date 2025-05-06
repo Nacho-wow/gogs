@@ -8,7 +8,7 @@ pipeline {
         DB_USER                 = credentials('DB_USER')
         DB_PASSWORD             = credentials('DB_PASSWORD')
 
-        VM_KEY_NAME            = credentials('EC2_KEY_NAME')
+        VM_KEY_NAME            = credentials('VM_KEY_NAME')
         CONTROL_IP              = credentials('CONTROL_IP')
 
         AZURE_STORAGE_ACCOUNT   = credentials('AZURE_STORAGE_ACCOUNT')
