@@ -72,8 +72,8 @@ configure:
 	--private-key $(KEY)
 
 generate-backup-ips:
-	cd terraform/prod/aws/ec2 && terraform output -raw ec2_public_ip > ../../../../EC2_IP.txt
-	cd terraform/prod/azure/network && terraform output -raw vm_ip > ../../../../VM_IP.txt
+	cd terraform/prod/aws/ec2 && terraform init && terraform output -raw ec2_public_ip > ../../../../EC2_IP.txt
+	cd terraform/prod/azure/network && terraform init && terraform output -raw vm_ip > ../../../../VM_IP.txt
 
 create-backup:
 	$(eval SERVER_IP=$(shell cat EC2_IP.txt))
