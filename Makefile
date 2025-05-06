@@ -11,7 +11,7 @@ generate-tfvars-aws:
 	@echo 'db_password = "$(DB_PASSWORD)"' >> terraform/prod/aws/rds/terraform.tfvars
 	@echo 'db_name = "$(DB_NAME)"' >> terraform/prod/aws/rds/terraform.tfvars
 
-genetare-tfvars-azure:
+generate-tfvars-azure:
 	@echo 'control_ip = "$(CONTROL_IP)"' > terraform/prod/azure/network/terraform.tfvars
 	@echo 'agent_ip = "$(AGENT_IP)"' >> terraform/prod/azure/network/terraform.tfvars
 
