@@ -2,29 +2,47 @@ docker-build:
 	docker build -t gogs .
 
 generate-tfvars-aws:
-	@echo 'ec2_ami = "$(EC2_AMI)"' > terraform/prod/ec2/terraform.tfvars
-	@echo 'ec2_key_name = "$(EC2_KEY_NAME)"' >> terraform/prod/ec2/terraform.tfvars
-	@echo 'control_ip = "$(CONTROL_IP)"' >> terraform/prod/ec2/terraform.tfvars
-	@echo 'agent_ip = "$(AGENT_IP)"' >> terraform/prod/ec2/terraform.tfvars
+	@echo 'ec2_ami = "$(EC2_AMI)"' > terraform/prod/aws/ec2/terraform.tfvars
+	@echo 'ec2_key_name = "$(EC2_KEY_NAME)"' >> terraform/prod/aws/ec2/terraform.tfvars
+	@echo 'control_ip = "$(CONTROL_IP)"' >> terraform/prod/aws/ec2/terraform.tfvars
+	@echo 'agent_ip = "$(AGENT_IP)"' >> terraform/prod/aws/ec2/terraform.tfvars
 
-	@echo 'db_user = "$(DB_USER)"' > terraform/prod/rds/terraform.tfvars
-	@echo 'db_password = "$(DB_PASSWORD)"' >> terraform/prod/rds/terraform.tfvars
-	@echo 'db_name = "$(DB_NAME)"' >> terraform/prod/rds/terraform.tfvars
+	@echo 'db_user = "$(DB_USER)"' > terraform/prod/aws/rds/terraform.tfvars
+	@echo 'db_password = "$(DB_PASSWORD)"' >> terraform/prod/aws/rds/terraform.tfvars
+	@echo 'db_name = "$(DB_NAME)"' >> terraform/prod/aws/rds/terraform.tfvars
+
+genetare-tfvars-azure:
+	@echo 'control_ip = "$(CONTROL_IP)"' > terraform/prod/azure/network/terraform.tfvars
+	@echo 'agent_ip = "$(AGENT_IP)"' >> terraform/prod/azure/network/terraform.tfvars
+
+	@echo 'db_user = "$(DB_USER)"' > terraform/prod/azure/db/terraform.tfvars
+	@echo 'db_password = "$(DB_PASSWORD)"' >> terraform/prod/azure/db/terraform.tfvars
+	@echo 'db_name = "$(DB_NAME)"' >> terraform/prod/azure/db/terraform.tfvars
+
+	@echo 'vm_key_name = "$(VM_KEY_NAME)"' > terraform/prod/azure/vm/terraform.tfvars
 
 infra-aws:
-	cd terraform/prod/network && terraform init && terraform apply -auto-approve
-	cd terraform/prod/ec2 && terraform init && terraform apply -auto-approve
-	cd terraform/prod/rds && terraform init && terraform apply -auto-approve
-	cd terraform/prod/security-rules && terraform init && terraform apply -auto-approve
+	cd terraform/prod/aws/network && terraform init && terraform apply -auto-approve
+	cd terraform/prod/aws/ec2 && terraform init && terraform apply -auto-approve
+	cd terraform/prod/aws/rds && terraform init && terraform apply -auto-approve
+	cd terraform/prod/aws/security-rules && terraform init && terraform apply -auto-approve
 
-	cd terraform/prod/ec2 && terraform output -raw ec2_public_ip > ../../../SERVER_IP.txt
-	cd terraform/prod/rds && terraform output -raw rds_endpoint > ../../../DB_ENDPOINT.txt
+	cd terraform/prod/aws/ec2 && terraform output -raw ec2_public_ip > ../../../../SERVER_IP.txt
+	cd terraform/prod/aws/rds && terraform output -raw rds_endpoint > ../../../../DB_ENDPOINT.txt
+
+infra-azure:
+	cd terraform/prod/azure/network && terraform init && terraform apply -auto-approve
+	cd terraform/prod/azure/vm && terraform init && terraform apply -auto-approve
+	cd terraform/prod/azure/db && terraform init && terraform apply -auto-approve
+
+	cd terraform/prod/azure/network && terraform output -raw vm_ip > ../../../../SERVER_IP.txt
+	cd terraform/prod/azure/db && terraform output -raw db_endpoint > ../../../../DB_ENDPOINT.txt
 
 generate-app-config:
 	$(eval SERVER_IP=$(shell cat SERVER_IP.txt))
 	$(eval DB_ENDPOINT=$(shell cat DB_ENDPOINT.txt))
 
-	@echo 'RUN_MODE = prod' > app.ini
+	@echo 'RUN_MODE = prod/aws' > app.ini
 	@echo '' >> app.ini
 	@echo '[server]' >> app.ini
 	@echo "EXTERNAL_URL = http://${SERVER_IP}:3000" >> app.ini

@@ -15,7 +15,7 @@ locals {
 }
 
 module "ec2" {
-  source = "../../modules/ec2"
+  source = "../../../modules/aws/ec2"
 
   ec2_ami      = var.ec2_ami
   ec2_key_name = var.ec2_key_name
