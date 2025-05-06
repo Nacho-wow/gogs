@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'default'
+        label 'agent1'
     }
 
     triggers {
@@ -24,11 +24,6 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            when {
-                not {
-                    branch 'main'
-                }
-            }
             steps {
                 sh 'make docker-build'
             }
@@ -57,6 +52,7 @@ pipeline {
         always {
             echo 'Limpiando espacio'
             cleanWs()
+            sh 'make clean'
         }
         failure {
             echo 'Todo mal unu'

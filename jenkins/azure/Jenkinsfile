@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'azure'
+        label 'agent1'
     }
 
     environment {
@@ -34,12 +34,6 @@ pipeline {
         stage('Clone Repo') {
             steps {
                 checkout scm
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                sh 'make docker-build'
             }
         }
 
@@ -91,7 +85,6 @@ pipeline {
         always {
             echo 'Limpiando espacio'
             cleanWs()
-            sh 'make clean'
         }
     }
 }
