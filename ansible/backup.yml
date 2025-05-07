@@ -5,30 +5,35 @@
     ansible_user: ubuntu
 
   tasks:
-    - name: Instalar ACL en EC2
-      become: yes
-      ansible.builtin.apt:
-        name: acl
-        state: present
-        update_cache: yes
+    # - name: Instalar ACL en EC2
+    #   become: yes
+    #   ansible.builtin.apt:
+    #     name: acl
+    #     state: present
+    #     update_cache: yes
 
-    - name: Crear usuario git
-      ansible.builtin.user:
-        name: git
-        state: present
-        create_home: no
+    # - name: Crear usuario git
+    #   ansible.builtin.user:
+    #     name: git
+    #     state: present
+    #     create_home: no
 
-    - name: Dar permisos al usuario git
-      ansible.posix.acl:
-        path: "{{ item }}"
-        entity: git
-        etype: user
-        permissions: rwx
-        state: present
-        recursive: true
+    # - name: Dar permisos al usuario git
+    #   ansible.posix.acl:
+    #     path: "{{ item }}"
+    #     entity: git
+    #     etype: user
+    #     permissions: rwx
+    #     state: present
+    #     recursive: true
+    #   loop:
+    #     - /var/lib/gogs/data
+    #     - /var/lib/gogs/backup
+    - name: Dar permisos de escritura a los directorios
+      shell: "docker exec gogs chmod 777 {{ item }}"
       loop:
-        - /var/lib/gogs/data
-        - /var/lib/gogs/backup
+        - /data
+        - /backup
 
     - name: Ejecutar Gogs backup
       shell: docker exec -u git gogs ./gogs backup
