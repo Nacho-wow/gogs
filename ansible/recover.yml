@@ -13,9 +13,9 @@
         permissions: rwx
         state: present
         recursive: yes
-        loop:
-          - /var/lib/gogs/data/gogs/conf
-          - /var/lib/gogs/backup
+      loop:
+        - /var/lib/gogs/data/gogs/conf
+        - /var/lib/gogs/backup
 
     - name: Encontrar backup
       shell: "ls -t ../backup/*.zip | head -n 1"

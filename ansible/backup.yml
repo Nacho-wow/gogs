@@ -13,9 +13,9 @@
         permissions: rwx
         state: present
         recursive: yes
-        loop:
-          - /var/lib/gogs/data/gogs/conf
-          - /var/lib/gogs/backup
+      loop:
+        - /var/lib/gogs/data/gogs/conf
+        - /var/lib/gogs/backup
 
     - name: Ejecutar Gogs backup
       shell: docker exec -u git gogs ./gogs backup
