@@ -6,7 +6,7 @@
 
   tasks:
     - name: Ejecutar Gogs backup
-      shell: docker exec gogs ./gogs backup
+      shell: docker exec -u git gogs ./gogs backup
 
     - name: Encontrar backup
       shell: "ls -t /var/lib/gogs/backup/*.zip | head -n 1"
