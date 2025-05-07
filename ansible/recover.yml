@@ -5,6 +5,18 @@
     ansible_user: ubuntu
 
   tasks:
+    - name: Dar permisos al usuario git
+      ansible.posix.acl:
+        path: "{{ item }}"
+        entity: git
+        etype: user
+        permissions: rwx
+        state: present
+        recursive: yes
+        loop:
+          - /var/lib/gogs/data/gogs/conf
+          - /var/lib/gogs/backup
+
     - name: Encontrar backup
       shell: "ls -t ../backup/*.zip | head -n 1"
       register: latest_backup
