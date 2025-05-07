@@ -88,7 +88,7 @@ create-backup:
 
 recover-backup:
 	$(eval SERVER_IP=$(shell cat VM_IP.txt))
-	BACKUP_FILE := $(shell ls backup/*.zip)
+	$(eval BACKUP_FILE=$(shell ls backup/*.zip))
 
 	cd ansible && ANSIBLE_HOST_KEY_CHECKING=False \
 	ansible-playbook -i "$(SERVER_IP)," recover.yml -u ubuntu \
