@@ -16,6 +16,4 @@
         dest: "/var/lib/gogs/backup/gogs-backup.zip"
 
     - name: Restore Gogs inside Docker
-      docker_container_exec:
-        container: "gogs"
-        command: ./gogs restore --from="/backup/gogs-backup.zip" --config=/data/gogs/conf/app.ini
+      shell: docker exec gogs ./gogs restore --from="/backup/gogs-backup.zip" --config=/data/gogs/conf/app.ini
