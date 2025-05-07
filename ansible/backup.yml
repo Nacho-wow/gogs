@@ -29,14 +29,14 @@
     #   loop:
     #     - /var/lib/gogs/data
     #     - /var/lib/gogs/backup
-    - name: Dar permisos de escritura a los directorios
-      shell: "docker exec gogs chmod 777 {{ item }}"
-      loop:
-        - /data
-        - /backup
+    # - name: Dar permisos de escritura a los directorios
+    #   shell: "docker exec gogs chmod 777 {{ item }}"
+    #   loop:
+    #     - /data
+    #     - /backup
 
     - name: Ejecutar Gogs backup
-      shell: docker exec -u git gogs ./gogs backup
+      shell: docker exec -u root gogs ./gogs backup
 
     - name: Encontrar backup
       shell: "ls -t /var/lib/gogs/backup/*.zip | head -n 1"

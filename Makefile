@@ -42,7 +42,8 @@ generate-app-config:
 	$(eval SERVER_IP=$(shell cat SERVER_IP.txt))
 	$(eval DB_ENDPOINT=$(shell cat DB_ENDPOINT.txt))
 
-	@echo 'RUN_MODE = prod/aws' > app.ini
+	@echo 'RUN_MODE = prod' > app.ini
+	@echo 'RUN_USER = root' >> app.ini
 	@echo '' >> app.ini
 	@echo '[server]' >> app.ini
 	@echo "EXTERNAL_URL = http://${SERVER_IP}:3000" >> app.ini
