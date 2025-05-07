@@ -5,6 +5,13 @@
     ansible_user: ubuntu
 
   tasks:
+    - name: Instalar ACL en VM
+      become: yes
+      ansible.builtin.apt:
+        name: acl
+        state: present
+        update_cache: yes
+
     - name: Dar permisos al usuario git
       ansible.posix.acl:
         path: "{{ item }}"
