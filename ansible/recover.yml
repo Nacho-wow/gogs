@@ -11,14 +11,9 @@
     #     - /data
     #     - /backup
 
-    - name: Encontrar backup
-      shell: "ls -t ../backup/*.zip | head -n 1"
-      register: latest_backup
-      changed_when: false
-
     - name: Copiar archivo de backup
       copy:
-        src: "{{ latest_backup.stdout }}"
+        src: "{{ backup_file_name }}"
         dest: "/var/lib/gogs/backup/gogs-backup.zip"
 
     - name: Restore Gogs inside Docker
