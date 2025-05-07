@@ -5,38 +5,16 @@
     ansible_user: ubuntu
 
   tasks:
-    # - name: Instalar ACL en EC2
-    #   become: yes
-    #   ansible.builtin.apt:
-    #     name: acl
-    #     state: present
-    #     update_cache: yes
-
-    # - name: Crear usuario git
-    #   ansible.builtin.user:
-    #     name: git
-    #     state: present
-    #     create_home: no
-
-    # - name: Dar permisos al usuario git
-    #   ansible.posix.acl:
-    #     path: "{{ item }}"
-    #     entity: git
-    #     etype: user
-    #     permissions: rwx
-    #     state: present
-    #     recursive: true
-    #   loop:
-    #     - /var/lib/gogs/data
-    #     - /var/lib/gogs/backup
-    # - name: Dar permisos de escritura a los directorios
-    #   shell: "docker exec gogs chmod 777 {{ item }}"
-    #   loop:
-    #     - /data
-    #     - /backup
-
     - name: Ejecutar Gogs backup
       shell: docker exec -u root gogs ./gogs backup
+
+    - name: Crear carpeta /backup en el contenedor
+      ansible.builtin.shell: |
+        docker exec gogs mkdir -p /backup
+
+    - name: Mover el archivo a /backup
+      ansible.builtin.shell: |
+        docker exec gogs sh -c 'mv gogs-backup-*.zip /backup/'
 
     - name: Encontrar backup
       shell: "ls -t /var/lib/gogs/backup/*.zip | head -n 1"
@@ -48,3 +26,8 @@
         src: "{{ latest_backup.stdout }}"
         dest: "../backup/"
         flat: yes
+
+    - name: Eliminar backup
+      ansible.builtin.file:
+        path: "{{ latest_backup.stdout }}"
+        state: absent
